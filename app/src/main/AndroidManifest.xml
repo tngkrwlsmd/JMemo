@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JMemo"
         tools:targetApi="31">
+
+        <activity android:name=".AddEditMemoActivity"
+            android:label="Add/Edit Memo"
+            android:parentActivityName=".MainActivity">
+            <!-- Ensure that you have specified the parent activity -->
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
