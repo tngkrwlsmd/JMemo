@@ -1,0 +1,8 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_folders"
+        android:title="폴더 관리"
+        android:showAsAction="never"
+        tools:ignore="AppCompatResource,HardcodedText" />
+</menu>
