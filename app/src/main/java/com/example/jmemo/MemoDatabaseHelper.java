@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MemoDatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2; // 데이터베이스 버전 증가
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "memo_db";
     private static final String TABLE_MEMOS = "memos";
     private static final String TABLE_FOLDERS = "folders";
@@ -51,28 +51,12 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // 폴더 CRUD 메서드 생략
-
     public void addFolder(Folder folder) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_FOLDER_NAME, folder.getName());
         db.insert(TABLE_FOLDERS, null, values);
         db.close();
-    }
-
-    public Folder getFolder(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_FOLDERS, new String[]{COLUMN_ID, COLUMN_FOLDER_NAME},
-                COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
-        Folder folder = new Folder(
-                Objects.requireNonNull(cursor).getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOLDER_NAME))
-        );
-        cursor.close();
-        return folder;
     }
 
     public List<Folder> getAllFolders() {
@@ -91,14 +75,6 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return folderList;
-    }
-
-    public int updateFolder(Folder folder) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_FOLDER_NAME, folder.getName());
-        return db.update(TABLE_FOLDERS, values, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(folder.getId())});
     }
 
     public void deleteFolder(Folder folder) {
@@ -174,13 +150,13 @@ public class MemoDatabaseHelper extends SQLiteOpenHelper {
         return memoList;
     }
 
-    public int updateMemo(Memo memo) {
+    public void updateMemo(Memo memo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, memo.getTitle());
         values.put(COLUMN_CONTENT, memo.getContent());
         values.put(COLUMN_FOLDER_ID, memo.getFolderId());
-        return db.update(TABLE_MEMOS, values, COLUMN_ID + " = ?",
+        db.update(TABLE_MEMOS, values, COLUMN_ID + " = ?",
                 new String[]{String.valueOf(memo.getId())});
     }
 

@@ -1,23 +1,25 @@
 package com.example.jmemo;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class FolderActivity extends AppCompatActivity {
     private MemoDatabaseHelper dbHelper;
-    private ListView listViewFolders;
+    private FolderAdapter mAdapter;
     private List<Folder> folderList;
 
     @Override
@@ -31,17 +33,19 @@ public class FolderActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("폴더 관리");
 
         dbHelper = new MemoDatabaseHelper(this);
-        listViewFolders = findViewById(R.id.listViewFolders);
+        RecyclerView recyclerViewFolders = findViewById(R.id.recycler_view_folders);
+        recyclerViewFolders.setLayoutManager(new LinearLayoutManager(this));
+
+        folderList = new ArrayList<>();
+        mAdapter = new FolderAdapter(folderList, this);
+        recyclerViewFolders.setAdapter(mAdapter);
+
+        ItemTouchHelper.Callback callback = new FolderItemTouchHelperCallback(mAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerViewFolders);
 
         FloatingActionButton fabAddFolder = findViewById(R.id.fab_add_folder);
         fabAddFolder.setOnClickListener(view -> showAddFolderDialog());
-
-        listViewFolders.setOnItemClickListener((parent, view, position, id) -> {
-            Folder folder = folderList.get(position);
-            Intent intent = new Intent(FolderActivity.this, FolderMemosActivity.class);
-            intent.putExtra("folderId", folder.getId());
-            startActivity(intent);
-        });
 
         loadFolders();
     }
@@ -66,9 +70,10 @@ public class FolderActivity extends AppCompatActivity {
         builder.show();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadFolders() {
-        folderList = dbHelper.getAllFolders();
-        ArrayAdapter<Folder> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, folderList);
-        listViewFolders.setAdapter(adapter);
+        folderList.clear();
+        folderList.addAll(dbHelper.getAllFolders());
+        mAdapter.notifyDataSetChanged();
     }
 }

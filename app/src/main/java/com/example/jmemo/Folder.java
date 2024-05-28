@@ -6,8 +6,6 @@ public class Folder {
     private int id;
     private String name;
 
-    public Folder() {}
-
     public Folder(String name) {
         this.name = name;
     }
@@ -27,10 +25,6 @@ public class Folder {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @NonNull
