@@ -103,7 +103,8 @@ public class AddEditMemoActivity extends AppCompatActivity {
 
         if (currentMemo == null) {
             // 새로운 메모 추가
-            Memo newMemo = new Memo(title, content, folderId);
+            int memoOrder = dbHelper.getMemoCount();
+            Memo newMemo = new Memo(title, content, folderId, memoOrder);
             dbHelper.addMemo(newMemo);
         } else {
             // 기존 메모 업데이트

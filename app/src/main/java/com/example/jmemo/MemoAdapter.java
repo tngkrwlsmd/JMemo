@@ -74,8 +74,25 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder
     }
 
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(memoList, fromPosition, toPosition);
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(memoList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(memoList, i, i - 1);
+            }
+        }
         notifyItemMoved(fromPosition, toPosition);
+        updateMemoOrder();
+    }
+
+    public void updateMemoOrder() {
+        for (int i = 0; i < memoList.size(); i++) {
+            Memo memo = memoList.get(i);
+            memo.setOrder(i);
+            dbHelper.updateMemoOrder(memo);
+        }
     }
 
     public static class MemoViewHolder extends RecyclerView.ViewHolder {

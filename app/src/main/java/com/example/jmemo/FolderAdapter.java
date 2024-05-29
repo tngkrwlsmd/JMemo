@@ -75,6 +75,15 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             }
         }
         notifyItemMoved(fromPosition, toPosition);
+        updateFolderOrder();
+    }
+
+    public void updateFolderOrder() {
+        for (int i = 0; i < mFolderList.size(); i++) {
+            Folder folder = mFolderList.get(i);
+            folder.setOrder(i);
+            mDatabaseHelper.updateFolderOrder(folder);
+        }
     }
 
     public static class FolderViewHolder extends RecyclerView.ViewHolder {
