@@ -5,4 +5,10 @@
         android:title="폴더 관리"
         android:showAsAction="never"
         tools:ignore="AppCompatResource,HardcodedText" />
+
+    <item
+        android:id="@+id/action_search"
+        android:title="메모 검색"
+        android:orderInCategory="100"
+        tools:ignore="HardcodedText" />
 </menu>

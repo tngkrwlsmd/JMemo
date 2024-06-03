@@ -22,6 +22,8 @@
             android:exported="true" />
         <activity android:name=".FolderMemosActivity"
             android:exported="true" />
+        <activity android:name=".SearchMemoActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
